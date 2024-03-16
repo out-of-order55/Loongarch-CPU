@@ -1,0 +1,10 @@
+0.6
+2019.2
+Nov  6 2019
+21:57:16
+C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/gettrace.sim/sim_1/behav/xsim/glbl.v,1573089660,verilog,,,,glbl,,,,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/BRIDGE/bridge_1x2.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/CONFREG/confreg.v,,bridge_1x2,,,,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/CONFREG/confreg.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/soc_lite_top.v,,confreg,,,,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/myCPU/SimpleLACoreWrapRAM.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/BRIDGE/bridge_1x2.v,,SimpleLACore;SimpleLACoreWrapRAM,,,,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/soc_lite_top.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/tb_top.v,,soc_lite_top,,,,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/tb_top.v,1710383888,verilog,,,,tb_top,,,,,,,,

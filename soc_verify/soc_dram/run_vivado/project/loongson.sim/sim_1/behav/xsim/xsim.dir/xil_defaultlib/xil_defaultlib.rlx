@@ -1,0 +1,18 @@
+0.6
+2019.2
+Nov  6 2019
+21:57:16
+C:/Users/Legion/Desktop/loongarch/mycpu_env/myCPU/alu.v,1710475187,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/testbench/async_ram.v,,alu,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/myCPU/mycpu_top.v,1710474662,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/myCPU/regfile.v,,mycpu_top,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/myCPU/regfile.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/soc_lite_top.v,,regfile,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/myCPU/tools.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/testbench/mycpu_tb.v,,decoder_2_4;decoder_4_16;decoder_5_32;decoder_6_64,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/BRIDGE/bridge_1x2.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/CONFREG/confreg.v,,bridge_1x2,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/CONFREG/confreg.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/myCPU/mycpu_top.v,,confreg,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/soc_lite_top.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/myCPU/tools.v,,soc_lite_top,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/xilinx_ip/clk_pll/clk_pll.v,1710470442,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/xilinx_ip/data_ram/sim/data_ram.v,,clk_pll,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/xilinx_ip/clk_pll/clk_pll_clk_wiz.v,1710470442,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/xilinx_ip/clk_pll/clk_pll.v,,clk_pll_clk_wiz,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/xilinx_ip/data_ram/sim/data_ram.v,1710470946,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/xilinx_ip/inst_ram/sim/inst_ram.v,,,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/xilinx_ip/inst_ram/sim/inst_ram.v,1710470894,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/myCPU/alu.v,,,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/run_vivado/project/loongson.sim/sim_1/behav/xsim/glbl.v,1573089660,verilog,,,,glbl,,,,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/testbench/async_ram.v,1710383888,verilog,,C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/rtl/BRIDGE/bridge_1x2.v,,async_ram;data_ram;inst_ram,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,
+C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/testbench/mycpu_tb.v,1710470654,verilog,,,,tb_top,,,../../../../../../rtl/xilinx_ip/clk_pll,,,,,

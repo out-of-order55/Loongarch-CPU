@@ -1,0 +1,38 @@
+Vivado Simulator 2019.2
+Time resolution is 1 ps
+==============================================================
+Test begin!
+----[   4785 ns] Number 8'd01 Functional Test Point PASS!!!
+----[  13295 ns] Number 8'd02 Functional Test Point PASS!!!
+----[  17585 ns] Number 8'd03 Functional Test Point PASS!!!
+        [  22000 ns] Test is running, debug_wb_pc = 0x1c01a4c0
+----[  24815 ns] Number 8'd04 Functional Test Point PASS!!!
+----[  26045 ns] Number 8'd05 Functional Test Point PASS!!!
+----[  30715 ns] Number 8'd06 Functional Test Point PASS!!!
+        [  32000 ns] Test is running, debug_wb_pc = 0x1c01b37c
+----[  35065 ns] Number 8'd07 Functional Test Point PASS!!!
+----[  38935 ns] Number 8'd08 Functional Test Point PASS!!!
+        [  42000 ns] Test is running, debug_wb_pc = 0x1c01c284
+----[  42725 ns] Number 8'd09 Functional Test Point PASS!!!
+----[  47475 ns] Number 8'd10 Functional Test Point PASS!!!
+----[  51705 ns] Number 8'd11 Functional Test Point PASS!!!
+        [  52000 ns] Test is running, debug_wb_pc = 0x1c0113f8
+----[  54315 ns] Number 8'd12 Functional Test Point PASS!!!
+----[  56925 ns] Number 8'd13 Functional Test Point PASS!!!
+        [  62000 ns] Test is running, debug_wb_pc = 0x1c012300
+----[  63275 ns] Number 8'd14 Functional Test Point PASS!!!
+----[  69305 ns] Number 8'd15 Functional Test Point PASS!!!
+        [  72000 ns] Test is running, debug_wb_pc = 0x1c013308
+----[  81615 ns] Number 8'd16 Functional Test Point PASS!!!
+        [  82000 ns] Test is running, debug_wb_pc = 0x1c014474
+----[  90355 ns] Number 8'd17 Functional Test Point PASS!!!
+        [  92000 ns] Test is running, debug_wb_pc = 0x1c01551c
+----[  97385 ns] Number 8'd18 Functional Test Point PASS!!!
+        [ 102000 ns] Test is running, debug_wb_pc = 0x1c0165b0
+        [ 112000 ns] Test is running, debug_wb_pc = 0x1c0176a0
+----[ 113735 ns] Number 8'd19 Functional Test Point PASS!!!
+----[ 121605 ns] Number 8'd20 Functional Test Point PASS!!!
+==============================================================
+Test end!
+----PASS!!!
+$finish called at time : 121965 ns : File "C:/Users/Legion/Desktop/loongarch/mycpu_env/soc_verify/soc_dram/testbench/mycpu_tb.v" Line 269
