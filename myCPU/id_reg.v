@@ -2,35 +2,46 @@ module id_reg (
     input               clk     ,
     input               rst     ,
     
-    input               i_id_valid ,
-    input               i_ex_ready ,
-    output              o_id_ready ,
-    output              o_ex_valid ,
+    input               i_if_valid ,
+    input               i_id_ready ,
+    output              o_if_ready ,
+    output              o_id_valid ,
 
-    input[31:0]         id_pc       ,
-    input[31:0]         id_inst     ,
-    input[15:0]         id_alu_op   ,
-    input[4:0]          id_rf_waddr ,
-    output reg[4:0]     ex_rf_waddr ,
-    output reg[15:0]    ex_alu_op   ,
-    output reg[31:0]    ex_pc       ,
-    output reg[31:0]    ex_inst
+    input               br_taken,
+    input[31:0]         if_pc   ,
+    input[31:0]         if_inst ,
+    output[31:0]        id_pc   ,
+    output[31:0]        id_inst
 );
     reg         valid_r;
-    wire        id_ready_go = 'b1;
-    assign      o_id_ready = (~valid_r)|((i_ex_ready)&id_ready_go);
+    reg[31:0]   id_pc_temp  ;
+    reg[31:0]   id_inst_temp;
+    wire        if_ready_go = 'b1;
+    assign      o_if_ready = (!valid_r)|((i_id_ready)&if_ready_go);
     always @(posedge clk) begin
         if(rst)begin
             valid_r <= 'b0;
         end
-        else if(i_ex_ready)begin
-            valid_r <= i_id_valid;
+        else if(o_if_ready)begin
+            valid_r <= i_if_valid;
         end
-        if(i_id_valid&o_id_ready)begin
-            ex_pc       <= id_pc  ;
-            ex_inst     <= id_inst;
-            ex_alu_op   <= id_alu_op;
-            ex_rf_waddr <= id_rf_waddr;
+
+    end
+    assign   o_id_valid= valid_r&if_ready_go;
+    always @(posedge clk) begin
+        if(rst)begin
+            id_pc_temp   <= 'b0;
+            id_inst_temp <= 'b0;
+        end
+        else if(br_taken)begin
+            id_pc_temp   <= if_pc  ;
+            id_inst_temp <= 'b0;
+        end
+        else if(i_if_valid&o_if_ready)begin
+            id_pc_temp   <= if_pc  ;
+            id_inst_temp <= if_inst;
         end
     end
+    assign  id_pc   = id_pc_temp  ;
+    assign  id_inst = id_inst_temp;
 endmodule

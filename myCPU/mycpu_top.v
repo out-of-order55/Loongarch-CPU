@@ -19,267 +19,234 @@ module mycpu_top(
     output wire [ 4:0] debug_wb_rf_wnum,
     output wire [31:0] debug_wb_rf_wdata
 );
-reg         reset;
-always @(posedge clk) reset <= ~resetn;
+    reg         reset;
+    always @(posedge clk) reset <= ~resetn;
+///////////////////////////val define //////////////////////
+    wire[31:0]        mem_rdata;
+    wire              exu_active   ;
+    wire[31:0]        mem_rf_wdata;
+    wire[31:0]        exu_mem_addr ;
+    wire[3:0]         exu_mem_re   ;
+    wire[31:0]        exu_mem_wdata;
+    wire[3:0]         exu_mem_we   ;
+    wire[31:0]        mem_to_wb_rf_wdata;
+    wire              if_to_id_valid       ;
+    wire              br_stall             ;
+    wire              br_taken             ;
+    wire[31:0]        br_target            ;
 
-reg         valid;
-always @(posedge clk) begin
-    if (reset) begin
-        valid <= 1'b0;
-    end
-    else begin
-        valid <= 1'b1;
-    end
-end
+    wire[31:0]        if_to_id_pc          ;
+    wire[31:0]        if_to_id_inst        ;
+    wire[31:0]        id_to_ex_src1        ;
+    wire[31:0]        id_to_ex_src2        ;
+    wire[31:0]        id_to_ex_pc          ;
+    wire[31:0]        id_to_ex_inst        ;
+    wire[15:0]        id_to_ex_alu_op      ;
+    wire[4:0]         id_to_ex_rf_waddr    ;
+    wire[31:0]        id_to_ex_mem_wdata   ;
 
-wire [31:0] seq_pc;
-wire [31:0] nextpc;
-wire        br_taken;
-wire [31:0] br_target;
-wire [31:0] inst;
-reg  [31:0] pc;
+    wire[31:0]        ex_to_mem_mem_addr   ;
+    wire[31:0]        ex_to_mem_alu_res    ;
+    wire[31:0]        ex_to_mem_mem_wdata  ;
+    wire[4:0]         ex_to_mem_rf_waddr   ;
+    wire              ex_to_mem_rf_we      ;
+    wire[3:0]         ex_to_mem_mem_re     ;
+    wire[3:0]         ex_to_mem_mem_we     ;
+    wire[31:0]        ex_to_mem_pc         ;
+    wire[31:0]        ex_to_mem_inst       ;   
 
-wire [15:0] alu_op;
-wire        load_op;
-wire        src1_is_pc;
-wire        src2_is_imm;
-wire        res_from_mem;
-wire        dst_is_r1;
-wire        gr_we;
-wire        mem_we;
-wire        src_reg_is_rd;
-wire [4: 0] dest;
-wire [31:0] rj_value;
-wire [31:0] rkd_value;
-wire [31:0] imm;
-wire [31:0] br_offs;
-wire [31:0] jirl_offs;
+    wire[31:0]        mem_to_wb_rf_rdata          ;
+    wire[4:0]         mem_to_wb_rf_waddr          ;
+    wire              mem_to_wb_rf_we             ;
+    wire[31:0]        mem_to_wb_pc                ;
+    wire[31:0]        mem_to_wb_inst              ;
+    wire              mem_to_wb_mem_re            ;
+    wire[31:0]        wb_rf_wdata;
+    wire[4:0]         wb_rf_waddr;
+    wire              wb_rf_we;
+    wire[31:0]        wb_pc  ;    
+    wire[31:0]        wb_inst;    
+    wire[31:0]         rf_rdata1;
+    wire[31:0]         rf_rdata2;
+    wire[4:0]          rf_raddr1;
+    wire[4:0]          rf_raddr2;
+    wire[4:0]          id_to_ex_rf_raddr1;
+    wire[4:0]          id_to_ex_rf_raddr2;
 
-wire [ 5:0] op_31_26;
-wire [ 3:0] op_25_22;
-wire [ 1:0] op_21_20;
-wire [ 4:0] op_19_15;
-wire [ 4:0] rd;
-wire [ 4:0] rj;
-wire [ 4:0] rk;
-wire [4:0]  ui5;
-wire [11:0] i12;
-wire [19:0] i20;
-wire [15:0] i16;
-wire [25:0] i26;
+    wire[31:0]         id_src1    ;
+    wire[31:0]         id_src2    ;
+    wire[31:0]         idu_src1    ;
+    wire[31:0]         idu_src2    ;
+    wire               idu_nready_go;
+    wire[31:0]         ex_rf_wdata;
+    wire    i_ex_ready = o_ex_ready;
+    wire    i_id_ready = o_id_ready;
+    wire    i_mem_ready = o_mem_ready;
+    wire              i_wb_ready;
+    wire              o_wb_ready;
+    wire              id_to_ex_valid;
+    wire              wb_active;
+////////////////////////////////////////////////////////////
+ifu IFU(
+    .clk             (clk            ),
+    .rst             (reset          ),
+    .i_id_ready      (i_id_ready     ),
+    .if_to_id_valid  (if_to_id_valid ),
+    .inst_sram_en    (inst_sram_en   ),
+    .bjp_stall       (br_stall       ),
+    .bjp_taken       (br_taken       ),
+    .bjp_target      (br_target      ),
+    .inst_sram_rdata (inst_sram_rdata),
+    .inst_sram_addr  (inst_sram_addr ),
+    .if_to_id_pc     (if_to_id_pc    ),
+    .if_to_id_inst   (if_to_id_inst  )
+);
 
-wire [63:0] op_31_26_d;
-wire [15:0] op_25_22_d;
-wire [ 3:0] op_21_20_d;
-wire [31:0] op_19_15_d;
+idu IDU(
+    .clk                (clk                 ),
+    .rst                (reset               ),
+    .if_to_id_valid     (if_to_id_valid      ),
+    .i_ex_ready         (i_ex_ready          ),
+    .idu_nready_go      (idu_nready_go       ),
+    .o_id_ready         (o_id_ready          ),
+    .id_to_ex_valid     (id_to_ex_valid      ),
+    .rf_rdata1          (idu_src1            ),
+    .rf_rdata2          (idu_src2            ),
+    .rf_raddr1          (rf_raddr1           ),
+    .rf_raddr2          (rf_raddr2           ),
+    .br_stall           (br_stall            ),
+    .br_taken           (br_taken            ),
+    .br_target          (br_target           ),
+    .if_to_id_inst      (if_to_id_inst       ),
+    .if_to_id_pc        (if_to_id_pc         ),
 
-wire        inst_add_w;
-wire        inst_sub_w;
-wire        inst_slt;
-wire        inst_sltu;
-wire        inst_nor;
-wire        inst_and;
-wire        inst_or;
-wire        inst_xor;
-wire        inst_slli_w;
-wire        inst_srli_w;
-wire        inst_srai_w;
-wire        inst_addi_w;
-wire        inst_ld_w;
-wire        inst_st_w;
-wire        inst_jirl;
-wire        inst_b;
-wire        inst_bl;
-wire        inst_beq;
-wire        inst_bne;
-wire        inst_lu12i_w;
+    .id_to_ex_pc        (id_to_ex_pc         ),
+    .id_to_ex_inst      (id_to_ex_inst       ),
+    .id_to_ex_src1      (id_to_ex_src1       ),
+    .id_to_ex_src2      (id_to_ex_src2       ),
+    .id_to_ex_alu_op    (id_to_ex_alu_op     ),
+    .id_to_ex_rf_waddr  (id_to_ex_rf_waddr   )
+);
 
-wire        need_ui5;
-wire        need_si12;
-wire        need_si16;
-wire        need_si20;
-wire        need_si26;
-wire        src2_is_4;
-
-wire [ 4:0] rf_raddr1;
-wire [31:0] rf_rdata1;
-wire [ 4:0] rf_raddr2;
-wire [31:0] rf_rdata2;
-wire        rf_we   ;
-wire [ 4:0] rf_waddr;
-wire [31:0] rf_wdata;
-
-wire [31:0] alu_src1   ;
-wire [31:0] alu_src2   ;
-wire [31:0] alu_result ;
-
-wire [31:0] mem_result;
-wire [31:0] final_result;
-
-assign seq_pc       = pc + 3'h4;
-assign nextpc       = br_taken ? br_target : seq_pc;
-
-always @(posedge clk) begin
-    if (reset) begin
-        pc <= 32'h1bfffffc;     //trick: to make nextpc be 0x1c000000 during reset 
-    end
-    else begin
-        pc <= nextpc;
-    end
-end
-
-assign inst_sram_we    = 1'b0;
-assign inst_sram_addr  = pc;
-assign inst_sram_wdata = 32'b0;
-assign inst            = inst_sram_rdata;
-
-assign op_31_26  = inst[31:26];
-assign op_25_22  = inst[25:22];
-assign op_21_20  = inst[21:20];
-assign op_19_15  = inst[19:15];
-
-assign rd   = inst[ 4: 0];
-assign rj   = inst[ 9: 5];
-assign rk   = inst[14:10];
-
-assign ui5  = inst[14:10];
-assign i12  = inst[21:10];
-assign i20  = inst[24: 5];
-assign i16  = inst[25:10];
-assign i26  = {inst[ 9: 0], inst[25:10]};
-
-decoder_6_64 u_dec0(.in(op_31_26 ), .out(op_31_26_d ));
-decoder_4_16 u_dec1(.in(op_25_22 ), .out(op_25_22_d ));
-decoder_2_4  u_dec2(.in(op_21_20 ), .out(op_21_20_d ));
-decoder_5_32 u_dec3(.in(op_19_15 ), .out(op_19_15_d ));
-
-assign inst_add_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h00];
-assign inst_sub_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h02];
-assign inst_slt    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h04];
-assign inst_sltu   = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h05];
-assign inst_nor    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h08];
-assign inst_and    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h09];
-assign inst_or     = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h0a];
-assign inst_xor    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h0b];
-assign inst_slli_w = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h01];
-assign inst_srli_w = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h09];
-assign inst_srai_w = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h11];
-assign inst_addi_w = op_31_26_d[6'h00] & op_25_22_d[4'ha];
-assign inst_ld_w   = op_31_26_d[6'h0a] & op_25_22_d[4'h2];
-assign inst_st_w   = op_31_26_d[6'h0a] & op_25_22_d[4'h6];
-assign inst_jirl   = op_31_26_d[6'h13];
-assign inst_b      = op_31_26_d[6'h14];
-assign inst_bl     = op_31_26_d[6'h15];
-assign inst_beq    = op_31_26_d[6'h16];
-assign inst_bne    = op_31_26_d[6'h17];
-assign inst_lu12i_w= op_31_26_d[6'h05] & ~inst[25];
-
-assign alu_op[ 0] = inst_add_w | inst_addi_w | inst_ld_w | inst_st_w
-                    | inst_jirl | inst_bl;
-assign alu_op[ 1] = inst_sub_w;
-assign alu_op[ 2] = inst_slt;
-assign alu_op[ 3] = inst_sltu;
-assign alu_op[ 4] = inst_and;
-assign alu_op[ 5] = inst_nor;
-assign alu_op[ 6] = inst_or;
-assign alu_op[ 7] = inst_xor;
-assign alu_op[ 8] = inst_slli_w;
-assign alu_op[ 9] = inst_srli_w;
-assign alu_op[10] = inst_srai_w;
-assign alu_op[11] = inst_lu12i_w;
-assign alu_op[12] = mem_we;
-assign alu_op[13] = gr_we; 
-assign alu_op[14] = res_from_mem;
+bypass_net bypass_net(
+    .clk                (clk            ),
+    .rst                (rst            ),
+    .id_rf_raddr1       (rf_raddr1      ),
+    .id_rf_raddr2       (rf_raddr2      ),
+    .id_src1            (rf_rdata1      ),
+    .id_src2            (rf_rdata2      ),
+    .idu_nready_go      (idu_nready_go  ),
+    .exu_active         (exu_active     ),
+    .ex_mem_re          (exu_mem_re     ),
+    .ex_rf_we           (ex_to_mem_rf_we),
+    .ex_rf_wdata        (ex_to_mem_alu_res      ),
+    .ex_rf_waddr        (ex_to_mem_rf_waddr     ),
+    .mem_mem_re         (mem_to_wb_mem_re       ), 
+    .mem_rf_we          (mem_to_wb_rf_we        ),
+    .mem_rf_wdata       (mem_to_wb_rf_wdata     ),
+    .mem_rf_waddr       (mem_to_wb_rf_waddr     ),
+    .wb_rf_we           (wb_rf_we       ),
+    .wb_rf_wdata        (wb_rf_wdata    ),
+    .wb_rf_waddr        (wb_rf_waddr    ),
+    .id_to_ex_mem_wdata (id_to_ex_mem_wdata),
+    .idu_src1           (idu_src1     ),
+    .idu_src2           (idu_src2     )
+);
+exu EXU(
+    .clk                  (clk              ),
+    .rst                  (reset            ),
+    .exu_active           (exu_active       ), 
+    .id_to_ex_valid       (id_to_ex_valid   ),
+    .i_mem_ready          (i_mem_ready      ),
+    .o_ex_ready           (o_ex_ready       ),
+    .ex_to_mem_valid      (ex_to_mem_valid  ),
 
 
-assign need_ui5   =  inst_slli_w | inst_srli_w | inst_srai_w;
-assign need_si12  =  inst_addi_w | inst_ld_w | inst_st_w;
-assign need_si16  =  inst_jirl | inst_beq | inst_bne;
-assign need_si20  =  inst_lu12i_w;
-assign need_si26  =  inst_b | inst_bl;
-assign src2_is_4  =  inst_jirl | inst_bl;
+    .id_to_ex_pc          (id_to_ex_pc       ),
+    .id_to_ex_inst        (id_to_ex_inst     ),
+    .id_to_ex_mem_wdata   (id_to_ex_mem_wdata),
+    .id_to_ex_src1        (id_to_ex_src1     ),
+    .id_to_ex_src2        (id_to_ex_src2     ),
+    .id_to_ex_alu_op      (id_to_ex_alu_op   ),
+    .id_to_ex_rf_waddr    (id_to_ex_rf_waddr ),
 
-assign imm = src2_is_4 ? 32'h4                      :
-            need_si20 ? {i20[19:0], 12'b0}          :
-            need_ui5  ? {27'b0,ui5}                    :
-            {{20{i12[11]}}, i12[11:0]} ;
+    .exu_mem_addr         (exu_mem_addr      ), 
+    .exu_mem_re           (exu_mem_re        ), 
+    .exu_mem_wdata        (exu_mem_wdata     ), 
+    .exu_mem_we           (exu_mem_we        ), 
 
-assign br_offs = need_si26 ? {{ 4{i26[25]}}, i26[25:0], 2'b0} :
-                             {{14{i16[15]}}, i16[15:0], 2'b0} ;
+    .ex_to_mem_mem_re     (ex_to_mem_mem_re  ),
+    .ex_to_mem_alu_res    (ex_to_mem_alu_res ),
+    .ex_to_mem_rf_waddr   (ex_to_mem_rf_waddr),
+    .ex_to_mem_rf_we      (ex_to_mem_rf_we   ),
+    .ex_to_mem_pc         (ex_to_mem_pc      ),
+    .ex_to_mem_inst       (ex_to_mem_inst    )  
+);
+    assign  i_wb_ready = o_wb_ready;
+mem MEM(
+    .clk                    (clk                ),
+    .rst                    (reset              ),
+    .ex_to_mem_valid        (ex_to_mem_valid    ),
+    .i_wb_ready             (i_wb_ready         ),
+    .o_mem_ready            (o_mem_ready        ),
+    .mem_to_wb_valid        (mem_to_wb_valid    ),
 
-assign jirl_offs = {{14{i16[15]}}, i16[15:0], 2'b0};
+    .ex_to_mem_alu_res      (ex_to_mem_alu_res  ),
+    .ex_to_mem_rf_waddr     (ex_to_mem_rf_waddr ),
+    .ex_to_mem_rf_we        (ex_to_mem_rf_we    ),
+    .ex_to_mem_pc           (ex_to_mem_pc       ),
+    .ex_to_mem_inst         (ex_to_mem_inst     ),
+    .ex_to_mem_mem_re       (ex_to_mem_mem_re   ),
 
-assign src_reg_is_rd = inst_beq | inst_bne | inst_st_w;
+    .mem_rdata              (mem_rdata          ),
 
-assign src1_is_pc    = inst_jirl | inst_bl;
+    .mem_to_wb_mem_re       (mem_to_wb_mem_re   ),      
+    .mem_to_wb_rf_wdata     (mem_to_wb_rf_wdata ),      
+    .mem_to_wb_rf_waddr     (mem_to_wb_rf_waddr ),      
+    .mem_to_wb_rf_we        (mem_to_wb_rf_we    ),      
+    .mem_to_wb_pc           (mem_to_wb_pc       ),      
+    .mem_to_wb_inst         (mem_to_wb_inst     )     
+);
 
-assign src2_is_imm   = inst_slli_w |
-                    inst_srli_w |
-                    inst_srai_w |
-                    inst_addi_w |
-                    inst_ld_w   |
-                    inst_st_w   |
-                    inst_lu12i_w|
-                    inst_jirl   |
-                    inst_bl     ;
 
-assign res_from_mem  = inst_ld_w;
-assign dst_is_r1     = inst_bl;
-assign gr_we         = ~inst_st_w & ~inst_beq & ~inst_bne & ~inst_b ;
-assign mem_we        = inst_st_w;
-assign dest          = dst_is_r1 ? 5'd1 : rd;
 
-assign rf_raddr1 = rj;
-assign rf_raddr2 = src_reg_is_rd ? rd :rk;
+wb WB(
+    .clk                   (clk                 ),
+    .rst                   (rst                 ),
+    .mem_to_wb_valid       (mem_to_wb_valid     ),
+    .o_wb_ready            (o_wb_ready          ),
+    .wb_active             (wb_active           ),
+    .mem_to_wb_rf_wdata    (mem_to_wb_rf_wdata  ),
+    .mem_to_wb_rf_waddr    (mem_to_wb_rf_waddr  ),
+    .mem_to_wb_rf_we       (mem_to_wb_rf_we     ),
+    .mem_to_wb_pc          (mem_to_wb_pc        ),
+    .mem_to_wb_inst        (mem_to_wb_inst      ),
+    .wb_rf_wdata           (wb_rf_wdata         ),
+    .wb_rf_waddr           (wb_rf_waddr         ),
+    .wb_rf_we              (wb_rf_we            ),
+    .wb_pc                 (wb_pc               ),
+    .wb_inst               (wb_inst             )
+
+);
 regfile u_regfile(
-    .clk    (clk      ),
-    .raddr1 (rf_raddr1),
-    .rdata1 (rf_rdata1),
-    .raddr2 (rf_raddr2),
-    .rdata2 (rf_rdata2),
-    .we     (rf_we    ),
-    .waddr  (rf_waddr ),
-    .wdata  (rf_wdata )
-    );
-
-assign rj_value  = rf_rdata1;
-assign rkd_value = rf_rdata2;
-
-assign rj_eq_rd = (rj_value == rkd_value);
-assign br_taken = (   inst_beq  &&  rj_eq_rd
-                   || inst_bne  && !rj_eq_rd
-                   || inst_jirl
-                   || inst_bl
-                   || inst_b
-                  ) && valid;
-assign br_target = (inst_beq || inst_bne || inst_bl || inst_b) ? (pc + br_offs) :
-                                                   /*inst_jirl*/ (rj_value + jirl_offs);
-
-assign alu_src1 = src1_is_pc  ? pc[31:0] : rj_value;
-assign alu_src2 = src2_is_imm ? imm : rkd_value;
-
-alu u_alu(
-    .alu_op     (alu_op    ),
-    .alu_src1   (alu_src1  ),
-    .alu_src2   (alu_src2  ),
-    .alu_result (alu_result)
-    );
-
-assign data_sram_we    = mem_we && valid;
-assign data_sram_addr  = alu_result;
-assign data_sram_wdata = rkd_value;
-
-assign mem_result   = data_sram_rdata;
-assign final_result = res_from_mem ? mem_result : alu_result;
-
-assign rf_we    = gr_we && valid;
-assign rf_waddr = dest;
-assign rf_wdata = final_result;
-
+    .clk    (clk        ),
+    .raddr1 (rf_raddr1  ),
+    .rdata1 (rf_rdata1  ),
+    .raddr2 (rf_raddr2  ),
+    .rdata2 (rf_rdata2  ),
+    .we     (wb_rf_we   ),
+    .waddr  (wb_rf_waddr),
+    .wdata  (wb_rf_wdata)
+);
+    assign data_sram_en    = (|(exu_mem_re))|(|(exu_mem_we));
+    assign data_sram_we    = exu_mem_we;
+    assign data_sram_addr  = exu_mem_addr;
+    assign data_sram_wdata = exu_mem_wdata;
+    assign mem_rdata       = data_sram_rdata;  
 // debug info generate
-assign debug_wb_pc       = pc;
-assign debug_wb_rf_we   = {4{rf_we}};
-assign debug_wb_rf_wnum  = dest;
-assign debug_wb_rf_wdata = final_result;
+assign debug_wb_pc       = wb_pc;
+assign debug_wb_rf_we    = wb_active?{4{wb_rf_we}}:4'b0;
+assign debug_wb_rf_wnum  = wb_rf_waddr;
+assign debug_wb_rf_wdata = wb_rf_wdata;
 
 endmodule

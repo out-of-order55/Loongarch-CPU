@@ -1,50 +1,49 @@
 module ex_reg (
-    input               clk                 ,
-    input               rst                 ,
+    input               clk             ,
+    input               rst             ,
     
-    input               i_ex_valid          ,
-    input               i_mem_ready         ,
-    output              o_ex_ready          ,
-    output              o_mem_valid         ,
-
-
-    input[31:0]         ex_alu_res          ,
-    input[31:0]         ex_mem_wdata        ,
-    input[4:0]          ex_rf_waddr         ,
-    input               ex_rf_we            ,
-    input               ex_res_from_mem     ,
-    input               ex_mem_we           ,
-    input[31:0]         ex_pc               ,
-    input[31:0]         ex_inst             ,
-
-    output reg[31:0]    mem_alu_res         ,
-    output reg[31:0]    mem_mem_wdata       ,
-    output reg[4:0]     mem_rf_waddr        ,
-    output reg          mem_rf_we           ,
-    output reg          mem_res_from_mem    ,
-    output reg          mem_mem_we          ,
-    output reg[31:0]    mem_pc              ,
-    output reg[31:0]    mem_inst            
+    input               if_to_id_valid  ,
+    input               i_ex_ready      ,
+    input               id_ready_go     ,
+    input               br_taken        ,
+    output              id_valid        ,
+    output              o_id_ready      ,
+    output              id_to_ex_valid  ,
+    input[31:0]         if_to_id_pc     ,
+    input[31:0]         if_to_id_inst   ,
+    output[31:0]        id_pc           ,
+    output[31:0]        id_inst     
 );
     reg         valid_r;
-    wire        ex_ready_go = 'b1;
-    assign      o_ex_ready = (~valid_r)|((i_mem_ready)&ex_ready_go);
+    reg[31:0]   id_to_ex_pc_temp       ;
+    reg[31:0]   id_to_ex_inst_temp     ;    
+    assign      id_to_ex_valid = valid_r&id_ready_go;
+    assign      o_id_ready = (!valid_r)|((i_ex_ready)&id_ready_go);
+
     always @(posedge clk) begin
         if(rst)begin
             valid_r <= 'b0;
         end
-        else if(i_mem_ready)begin
-            valid_r <= i_ex_valid;
+        else if(o_id_ready)begin
+            valid_r <= if_to_id_valid;
         end
-        if(i_ex_valid&o_ex_ready)begin
-            mem_alu_res       <= ex_alu_res      ;
-            mem_mem_wdata     <= ex_mem_wdata    ;
-            mem_rf_waddr      <= ex_rf_waddr     ;
-            mem_rf_we         <= ex_rf_we        ;
-            mem_res_from_mem  <= ex_res_from_mem ;
-            mem_mem_we        <= ex_mem_we       ;
-            mem_pc            <= ex_pc           ;
-            mem_inst          <= ex_inst         ;
+
+    end
+    always @(posedge clk) begin
+        if(rst)begin
+            id_to_ex_pc_temp      <= 'b0;
+            id_to_ex_inst_temp     <='b0;
+        end
+        else if(br_taken)begin
+            id_to_ex_pc_temp       <= if_to_id_pc;
+            id_to_ex_inst_temp     <= 'b0;
+        end
+        else if(if_to_id_valid&o_id_ready)begin
+            id_to_ex_pc_temp      <= if_to_id_pc  ;
+            id_to_ex_inst_temp    <= if_to_id_inst;
         end
     end
+    assign id_pc        = id_to_ex_pc_temp       ;
+    assign id_inst      = id_to_ex_inst_temp     ;
+    assign id_valid           = valid_r;
 endmodule
