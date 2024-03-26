@@ -1,0 +1,1 @@
+`define ALU_OP 32

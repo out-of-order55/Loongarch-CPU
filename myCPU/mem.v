@@ -1,3 +1,4 @@
+`include "define.v"
 module mem(
     input wire              clk                     ,
     input wire              rst                     ,

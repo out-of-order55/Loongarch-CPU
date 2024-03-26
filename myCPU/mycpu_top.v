@@ -1,3 +1,4 @@
+`include "define.v"
 module mycpu_top(
     input  wire        clk,
     input  wire        resetn,
@@ -41,7 +42,7 @@ module mycpu_top(
     wire[31:0]        id_to_ex_src2        ;
     wire[31:0]        id_to_ex_pc          ;
     wire[31:0]        id_to_ex_inst        ;
-    wire[15:0]        id_to_ex_alu_op      ;
+    wire[`ALU_OP-1:0]        id_to_ex_alu_op      ;
     wire[4:0]         id_to_ex_rf_waddr    ;
     wire[31:0]        id_to_ex_mem_wdata   ;
 

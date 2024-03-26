@@ -1,0 +1,151 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+# IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+# Start of session at: Tue Mar 26 13:03:37 2024
+# Process ID: 18028
+# Current directory: C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent12140 C:\Users\Legion\Desktop\loongarch\mycpu_env\gettrace\gettrace.xpr
+# Log file: C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/vivado.log
+# Journal file: C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/gettrace.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'E:/Xilinx/Vivado/2019.2/data/ip'.
+open_project: Time (s): cpu = 00:00:13 ; elapsed = 00:00:06 . Memory (MB): peak = 916.441 ; gain = 259.980
+update_compile_order -fileset sources_1
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/gettrace.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'tb_top' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/gettrace.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj tb_top_vlog.prj"
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/gettrace.sim/sim_1/behav/xsim'
+"xelab -wto f64dd51de259492d93bd1922eb923ed9 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator 2019.2
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: E:/Xilinx/Vivado/2019.2/bin/unwrapped/win64.o/xelab.exe -wto f64dd51de259492d93bd1922eb923ed9 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/gettrace.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "tb_top_behav -key {Behavioral:sim_1:Functional:tb_top} -tclbatch {tb_top.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2019.2
+Time resolution is 1 ps
+source tb_top.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'tb_top_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:08 ; elapsed = 00:00:07 . Memory (MB): peak = 949.656 ; gain = 15.676
+run all
+==============================================================
+Test begin!
+----[  12055 ns] Number 8'd01 Functional Test Point PASS!!!
+        [  22000 ns] Test is running, debug_wb_pc = 0x1c03976c
+        [  32000 ns] Test is running, debug_wb_pc = 0x1c03a70c
+----[  36405 ns] Number 8'd02 Functional Test Point PASS!!!
+        [  42000 ns] Test is running, debug_wb_pc = 0x1c03b660
+        [  52000 ns] Test is running, debug_wb_pc = 0x1c03c600
+----[  54735 ns] Number 8'd03 Functional Test Point PASS!!!
+        [  62000 ns] Test is running, debug_wb_pc = 0x1c03d554
+        [  72000 ns] Test is running, debug_wb_pc = 0x1c03e4f4
+----[  79085 ns] Number 8'd04 Functional Test Point PASS!!!
+        [  82000 ns] Test is running, debug_wb_pc = 0x1c03f448
+        [  92000 ns] Test is running, debug_wb_pc = 0x1c0403e8
+        [ 102000 ns] Test is running, debug_wb_pc = 0x1c041388
+----[ 103435 ns] Number 8'd05 Functional Test Point PASS!!!
+        [ 112000 ns] Test is running, debug_wb_pc = 0x1c0422dc
+        [ 122000 ns] Test is running, debug_wb_pc = 0x1c04327c
+----[ 127785 ns] Number 8'd06 Functional Test Point PASS!!!
+        [ 132000 ns] Test is running, debug_wb_pc = 0x1c0441d0
+        [ 142000 ns] Test is running, debug_wb_pc = 0x1c045170
+        [ 152000 ns] Test is running, debug_wb_pc = 0x1c046110
+----[ 152135 ns] Number 8'd07 Functional Test Point PASS!!!
+        [ 162000 ns] Test is running, debug_wb_pc = 0x1c047064
+        [ 172000 ns] Test is running, debug_wb_pc = 0x1c048004
+----[ 176485 ns] Number 8'd08 Functional Test Point PASS!!!
+        [ 182000 ns] Test is running, debug_wb_pc = 0x1c048f58
+        [ 192000 ns] Test is running, debug_wb_pc = 0x1c049ef8
+----[ 200835 ns] Number 8'd09 Functional Test Point PASS!!!
+        [ 202000 ns] Test is running, debug_wb_pc = 0x1c0107e4
+        [ 212000 ns] Test is running, debug_wb_pc = 0x1c011784
+        [ 222000 ns] Test is running, debug_wb_pc = 0x1c012724
+----[ 225185 ns] Number 8'd10 Functional Test Point PASS!!!
+        [ 232000 ns] Test is running, debug_wb_pc = 0x1c013678
+        [ 242000 ns] Test is running, debug_wb_pc = 0x1c014618
+----[ 243515 ns] Number 8'd11 Functional Test Point PASS!!!
+        [ 252000 ns] Test is running, debug_wb_pc = 0x1c01556c
+----[ 261845 ns] Number 8'd12 Functional Test Point PASS!!!
+        [ 262000 ns] Test is running, debug_wb_pc = 0x1c010190
+        [ 272000 ns] Test is running, debug_wb_pc = 0x1c017460
+----[ 280175 ns] Number 8'd13 Functional Test Point PASS!!!
+        [ 282000 ns] Test is running, debug_wb_pc = 0x1c0183b4
+----[ 290685 ns] Number 8'd14 Functional Test Point PASS!!!
+        [ 292000 ns] Test is running, debug_wb_pc = 0x1c019308
+----[ 301995 ns] Number 8'd15 Functional Test Point PASS!!!
+        [ 302000 ns] Test is running, debug_wb_pc = 0x1c0100c4
+        [ 312000 ns] Test is running, debug_wb_pc = 0x1c01b6d4
+        [ 322000 ns] Test is running, debug_wb_pc = 0x1c01cb24
+        [ 332000 ns] Test is running, debug_wb_pc = 0x1c01dc14
+        [ 342000 ns] Test is running, debug_wb_pc = 0x1c01ed1c
+        [ 352000 ns] Test is running, debug_wb_pc = 0x1c0200d4
+        [ 362000 ns] Test is running, debug_wb_pc = 0x1c021564
+----[ 363495 ns] Number 8'd16 Functional Test Point PASS!!!
+        [ 372000 ns] Test is running, debug_wb_pc = 0x1c02267c
+        [ 382000 ns] Test is running, debug_wb_pc = 0x1c023760
+        [ 392000 ns] Test is running, debug_wb_pc = 0x1c024a5c
+        [ 402000 ns] Test is running, debug_wb_pc = 0x1c025eec
+        [ 412000 ns] Test is running, debug_wb_pc = 0x1c027144
+        [ 422000 ns] Test is running, debug_wb_pc = 0x1c028234
+----[ 428955 ns] Number 8'd17 Functional Test Point PASS!!!
+        [ 432000 ns] Test is running, debug_wb_pc = 0x1c0292e4
+        [ 442000 ns] Test is running, debug_wb_pc = 0x1c02a3c8
+        [ 452000 ns] Test is running, debug_wb_pc = 0x1c02b48c
+        [ 462000 ns] Test is running, debug_wb_pc = 0x1c02c55c
+        [ 472000 ns] Test is running, debug_wb_pc = 0x1c02d634
+----[ 481225 ns] Number 8'd18 Functional Test Point PASS!!!
+        [ 482000 ns] Test is running, debug_wb_pc = 0x1c02e6b0
+        [ 492000 ns] Test is running, debug_wb_pc = 0x1c02f7a0
+        [ 502000 ns] Test is running, debug_wb_pc = 0x1c030890
+        [ 512000 ns] Test is running, debug_wb_pc = 0x1c031978
+        [ 522000 ns] Test is running, debug_wb_pc = 0x1c032a68
+----[ 529495 ns] Number 8'd19 Functional Test Point PASS!!!
+        [ 532000 ns] Test is running, debug_wb_pc = 0x1c034a6c
+        [ 542000 ns] Test is running, debug_wb_pc = 0x1c035bb4
+        [ 552000 ns] Test is running, debug_wb_pc = 0x1c036cf4
+        [ 562000 ns] Test is running, debug_wb_pc = 0x1c037e3c
+----[ 567765 ns] Number 8'd20 Functional Test Point PASS!!!
+==============================================================
+gettrace end!
+----Succeed in generating trace file!
+$finish called at time : 568095 ns : File "C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/src/tb_top.v" Line 224
+run: Time (s): cpu = 00:00:09 ; elapsed = 00:00:13 . Memory (MB): peak = 961.152 ; gain = 0.566
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+exit
+INFO: [Common 17-206] Exiting Vivado at Tue Mar 26 13:06:39 2024...

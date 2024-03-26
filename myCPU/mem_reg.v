@@ -7,12 +7,12 @@ module mem_reg (
     output              ex_to_mem_valid     ,
     output              o_ex_ready          ,
     output              ex_valid            ,
-
+    input               ex_ready_go         ,
     input[31:0]        id_to_ex_src1              ,
     input[31:0]        id_to_ex_src2              ,
     input[31:0]        id_to_ex_pc                ,
     input[31:0]        id_to_ex_inst              ,
-    input[15:0]        id_to_ex_alu_op            ,
+    input[`ALU_OP-1:0]        id_to_ex_alu_op            ,
     input[4:0]         id_to_ex_rf_waddr          ,
     input[31:0]        id_to_ex_mem_wdata         ,
 
@@ -21,7 +21,7 @@ module mem_reg (
     output[31:0]       ex_src2                    ,
     output[31:0]       ex_pc                      ,
     output[31:0]       ex_inst                    ,
-    output[15:0]       ex_alu_op                  ,
+    output[`ALU_OP-1:0]       ex_alu_op                  ,
     output[4:0]        ex_rf_waddr                      
 );
     reg         valid_r;
@@ -29,11 +29,11 @@ module mem_reg (
     reg[31:0]   ex_src2_temp        ;      
     reg[31:0]   ex_pc_temp          ;        
     reg[31:0]   ex_inst_temp        ;      
-    reg[15:0]   ex_alu_op_temp      ;    
+    reg[`ALU_OP-1:0]   ex_alu_op_temp      ;    
     reg[4:0]    ex_rf_waddr_temp    ;
     reg[31:0]   ex_mem_wdata_temp;
 
-    wire        ex_ready_go = 'b1;
+    
     assign      ex_to_mem_valid = valid_r&ex_ready_go;
     assign      o_ex_ready = (~valid_r)|((i_mem_ready)&ex_ready_go);
     always @(posedge clk) begin
