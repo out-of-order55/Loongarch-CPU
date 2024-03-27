@@ -2,10 +2,10 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Tue Mar 26 13:13:40 2024
-# Process ID: 14164
+# Start of session at: Wed Mar 27 11:09:27 2024
+# Process ID: 4080
 # Current directory: C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent19832 C:\Users\Legion\Desktop\loongarch\mycpu_env\gettrace\gettrace.xpr
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent19452 C:\Users\Legion\Desktop\loongarch\mycpu_env\gettrace\gettrace.xpr
 # Log file: C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/vivado.log
 # Journal file: C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace\vivado.jou
 #-----------------------------------------------------------
@@ -14,5 +14,11 @@ open_project C:/Users/Legion/Desktop/loongarch/mycpu_env/gettrace/gettrace.xpr
 update_compile_order -fileset sources_1
 launch_simulation
 source tb_top.tcl
+relaunch_sim
+restart
+run all
+current_wave_config {Untitled 1}
+add_wave {{/tb_top/soc_lite/cpu/io_debug_pc}} {{/tb_top/soc_lite/cpu/io_debug_inst}} 
+restart
 run all
 close_sim

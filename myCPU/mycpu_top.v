@@ -23,6 +23,7 @@ module mycpu_top(
     reg         reset;
     always @(posedge clk) reset <= ~resetn;
 ///////////////////////////val define //////////////////////
+    wire              ex_to_mem_mem_signal;
     wire[31:0]        mem_rdata;
     wire              exu_active   ;
     wire[31:0]        mem_rf_wdata;
@@ -138,7 +139,7 @@ bypass_net bypass_net(
     .id_src2            (rf_rdata2      ),
     .idu_nready_go      (idu_nready_go  ),
     .exu_active         (exu_active     ),
-    .ex_mem_re          (exu_mem_re     ),
+    .ex_mem_re          (|exu_mem_re     ),
     .ex_rf_we           (ex_to_mem_rf_we),
     .ex_rf_wdata        (ex_to_mem_alu_res      ),
     .ex_rf_waddr        (ex_to_mem_rf_waddr     ),
@@ -175,7 +176,7 @@ exu EXU(
     .exu_mem_re           (exu_mem_re        ), 
     .exu_mem_wdata        (exu_mem_wdata     ), 
     .exu_mem_we           (exu_mem_we        ), 
-
+    .ex_to_mem_mem_signal (ex_to_mem_mem_signal),
     .ex_to_mem_mem_re     (ex_to_mem_mem_re  ),
     .ex_to_mem_alu_res    (ex_to_mem_alu_res ),
     .ex_to_mem_rf_waddr   (ex_to_mem_rf_waddr),
@@ -192,6 +193,7 @@ mem MEM(
     .o_mem_ready            (o_mem_ready        ),
     .mem_to_wb_valid        (mem_to_wb_valid    ),
 
+    .ex_to_mem_mem_signal   (ex_to_mem_mem_signal),
     .ex_to_mem_alu_res      (ex_to_mem_alu_res  ),
     .ex_to_mem_rf_waddr     (ex_to_mem_rf_waddr ),
     .ex_to_mem_rf_we        (ex_to_mem_rf_we    ),
